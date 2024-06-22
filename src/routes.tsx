@@ -1,6 +1,6 @@
 import {ReactElement} from "react";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import FileExplorer from "./pages/FileExplorer.tsx";
+import FileExplorer from "./pages/FileExplores/FileExplorer.tsx";
 
 const Routes = (): ReactElement => {
 
