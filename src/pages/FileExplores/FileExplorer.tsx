@@ -1,15 +1,33 @@
-import { Link } from "react-router-dom";
 import { Search } from "../../components/Search";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import {useQuery} from "@tanstack/react-query";
+import axios from "axios";
+import {AndroidDirectoryModel} from "../../utils/models/AndroidDirectory.model.ts";
+import DirectoryElement from "../../components/DirectoryElement/DirectoryElement.tsx";
+import {useEffect} from "react";
 
 export function FileExplorer(){
 
-    const queryClient = new QueryClient();
+    const fetchDirectories = (): Promise<AndroidDirectoryModel> => {
+        return axios
+            .post('http://localhost:5033/api/Directory/ListDirectory',
+                {"path": "/"}
+            )
+            .then((res) => res.data as AndroidDirectoryModel)
+    }
+
+    const { isLoading, error, data: androidDirectory, isFetching } = useQuery({
+        queryKey: ['directories'],
+        queryFn: () => fetchDirectories(),
+    })
+
 
     return(
-        <QueryClientProvider client={queryClient}>
+        <>
             <Search/>
-        </QueryClientProvider>     
+            {isLoading ? "...Loading" :
+                androidDirectory &&
+                androidDirectory.directories.map((dir) => <DirectoryElement directory={dir}/>)
+            }
+        </>
     )
 }
