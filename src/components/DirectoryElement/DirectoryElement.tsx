@@ -1,10 +1,15 @@
 import {DirectoryModel} from "../../utils/models/Directory.model.ts";
 
-const DirectoryElement = ({directory}: { directory: DirectoryModel }) => {
+interface Props {
+    directory: DirectoryModel,
+    onClick?: () => void
+}
+
+const DirectoryElement = ({directory, onClick}: Props) => {
     const directoryName = directory.path.split("/").slice(-1) || "N/A";
 
     return(
-        <div>
+        <div onClick={() => onClick && onClick()}>
             {
                 directoryName
             }

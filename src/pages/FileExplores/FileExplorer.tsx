@@ -1,33 +1,33 @@
-import { Search } from "../../components/Search";
-import {useQuery} from "@tanstack/react-query";
-import axios from "axios";
-import {AndroidDirectoryModel} from "../../utils/models/AndroidDirectory.model.ts";
-import DirectoryElement from "../../components/DirectoryElement/DirectoryElement.tsx";
-import {useEffect} from "react";
+import {Search} from "@/components/Search";
+import {useEffect, useState} from "react";
+import DialogCreateDirectoryItem from "@/components/Dialog/DialogCreateDirectoryItem.tsx";
+import FilesListing from "@/components/FileExplorer/FilesListing.tsx";
+import {useNavigation} from "@/providers/FileNavigationProvider.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
-export function FileExplorer(){
+export function FileExplorer() {
+    const {actions, history} = useNavigation();
 
-    const fetchDirectories = (): Promise<AndroidDirectoryModel> => {
-        return axios
-            .post('http://localhost:5033/api/Directory/ListDirectory',
-                {"path": "/"}
-            )
-            .then((res) => res.data as AndroidDirectoryModel)
-    }
+    const [selectedDirectory, setSelectedDirectory] = useState<string>("/");
 
-    const { isLoading, error, data: androidDirectory, isFetching } = useQuery({
-        queryKey: ['directories'],
-        queryFn: () => fetchDirectories(),
-    })
+    useEffect(() => {
+        actions.setAs("/")
+    }, []);
 
 
-    return(
+    return (
         <>
+            <div>
             <Search/>
-            {isLoading ? "...Loading" :
-                androidDirectory &&
-                androidDirectory.directories.map((dir) => <DirectoryElement directory={dir}/>)
+            <DialogCreateDirectoryItem/>
+            </div>
+            {history.length >= 2 &&
+                <Button  title={"<- Go Back"} onClick={() => {
+                    const directoryLastIndex = actions.pop().slice(-1);
+                    setSelectedDirectory(directoryLastIndex[0]);
+                }}>&lt;- Go Back</Button>
             }
+            <FilesListing path={selectedDirectory} setPath={setSelectedDirectory}/>
         </>
     )
 }
