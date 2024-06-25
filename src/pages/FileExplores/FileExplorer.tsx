@@ -1,4 +1,4 @@
-import {Search} from "@/components/Search";
+import { Search } from "@/components/Search/Search";
 import {useEffect, useState} from "react";
 import DialogCreateDirectoryItem from "@/components/Dialog/DialogCreateDirectoryItem.tsx";
 import FilesListing from "@/components/FileExplorer/FilesListing.tsx";
@@ -17,17 +17,19 @@ export function FileExplorer() {
 
     return (
         <>
-            <div>
             <Search/>
+            <div className="flex flex-col items-center">
             <DialogCreateDirectoryItem/>
-            </div>
             {history.length >= 2 &&
-                <Button  title={"<- Go Back"} onClick={() => {
+                <Button className="mb-2" title={"<- Go Back"} onClick={() => {
                     const directoryLastIndex = actions.pop().slice(-1);
                     setSelectedDirectory(directoryLastIndex[0]);
                 }}>&lt;- Go Back</Button>
             }
-            <FilesListing path={selectedDirectory} setPath={setSelectedDirectory}/>
+            </div>
+            <div className=" text-white gap-2 flex flex-col items-center justify-between">
+                <FilesListing path={selectedDirectory} setPath={setSelectedDirectory}/>
+            </div>
         </>
     )
 }

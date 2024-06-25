@@ -35,15 +35,19 @@ const FilesListing = ({path, setPath}: Props) => {
             {isLoading ? "...Loading" :
                 androidDirectory &&
                 androidDirectory.files?.map((dir) =>
+                    <div className="text-white gap-4 flex flex-col justify-center items-center bg-slate-900 rounded-md px-4 py-4 cursor-pointer">
                     <DirectoryElement
                         directory={dir}
                         onClick={() => {
                             setPath(dir.path)
                             actions.add(dir.path);
                         }}
-                    />)
-            }
+                    />
+                    </div>
+                    )
+            }  
         </>
+        
     )
 }
 
