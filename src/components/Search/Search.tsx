@@ -2,6 +2,8 @@ import { DirectoryModel } from "@/utils/models/Directory.model";
 import axios from "axios";
 import { useState } from "react"
 import { BsSearch } from "react-icons/bs"
+import { Tag } from "../Tag/Tag";
+import { Order } from "../Order/Order";
 
 interface SearchProps{
     onSelect: (searchTerm: DirectoryModel) => void;
@@ -35,10 +37,14 @@ const Search = ({onSelect}: SearchProps) => {
                 <button onClick={ () => fetchDirectories() } type="button" value="Buscar" className="bg-transparent">
                     <BsSearch size={30} color="#fff" />
                 </button>
+
+                <Tag />
+                <Order />
                 
             </div>
 
-            <div className="text-white mb-5 px-2 py-2 ">
+            
+            <div className="text-white mb-5 px-2 py-2 cursor-pointer">
                 {results.map((result) => 
                     <div 
                         onClick={() => onSelect(result)}

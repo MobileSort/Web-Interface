@@ -6,7 +6,6 @@ import {Button} from "@/components/ui/button.tsx";
 import Search from "@/components/Search/Search";
 import { DirectoryModel } from "@/utils/models/Directory.model";
 import DialogDeleteDirectoryItem from "@/components/Dialog/DiologDeleteDirectoryItem.tsx";
-import { Tag } from "@/components/Tag/Tag";
 
 export function FileExplorer() {
     const {actions, history} = useNavigation();
@@ -25,12 +24,9 @@ export function FileExplorer() {
 
 
     return (
-        <>
-            
-            <div className="">
+        <>  
                 <Search onSelect={(result) => handleSearch(result)} />
-                <Tag />
-            </div>
+            
                 <div className="flex flex-col items-center">
                     <DialogCreateDirectoryItem path={selectedDirectory}/>
                     <DialogDeleteDirectoryItem/>
