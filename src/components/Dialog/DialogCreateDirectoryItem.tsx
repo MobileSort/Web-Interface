@@ -30,7 +30,7 @@ const DialogCreateDirectoryItem = ({path}: Props) => {
             register,
             setValue,
         } = useForm({resolver: yupResolver(schema),});
-        const onSubmit = (data) => {
+        const onSubmit = (data: { TipoItem: string; NomeItem: string; }) => {
             const url = data.TipoItem == "directory" ? 'https://localhost:7213/api/Directory/AddDirectory' : "https://localhost:7213/api/Directory/AddFile"
             let model: any = {path:path +"/"+ data.NomeItem}
             if (data.TipoItem == "file"){

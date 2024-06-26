@@ -35,6 +35,7 @@ const Search = ({onSelect}: SearchProps) => {
                 <button onClick={ () => fetchDirectories() } type="button" value="Buscar" className="bg-transparent">
                     <BsSearch size={30} color="#fff" />
                 </button>
+                
             </div>
 
             <div className="text-white mb-5 px-2 py-2 ">
