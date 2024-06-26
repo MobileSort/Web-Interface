@@ -1,35 +1,51 @@
-import { FormEvent, useState } from "react"
+import { DirectoryModel } from "@/utils/models/Directory.model";
+import axios from "axios";
+import { useState } from "react"
 import { BsSearch } from "react-icons/bs"
 
 interface SearchProps{
-    onSearch: (searchTerm: string) => void;
+    onSelect: (searchTerm: DirectoryModel) => void;
 }
 
-const Search = ({onSearch}: SearchProps) => {
-
+const Search = ({onSelect}: SearchProps) => {
+    const [results, setResults] = useState<DirectoryModel[]>([])
     const [searchTerm, setSearchTerm] = useState("")
 
-    const handleSearch = (e: FormEvent) => {
-        e.preventDefault();
-        
-        onSearch(searchTerm);
+    const fetchDirectories = () => {
+        axios
+            .post('http://localhost:5033/api/Directory/SearchItem',
+                {
+                    "searchItem": searchTerm
+                }
+            )
+            .then((res) => setResults(res.data))
     }
 
     return(
         <main className="flex flex-col items-center">
-            <form className="flex mt-8 mb-8 w-full gap-3 max-w-xl justify-between px-3 py-3 rounded-md">
+            <div className="flex mt-8 w-full gap-3 max-w-xl justify-between px-3 py-3 rounded-md">
                 <input 
                     type="text"
                     placeholder="Digite o nome do diretório ou arquivo..."
-                    className="mt-2 mb-2 px-2 py-2 rounded-md w-full"
+                    className="px-2 py-2 rounded-md w-full"
                     value={searchTerm}
                     onChange={ (e) => setSearchTerm(e.target.value) }
                 />
 
-                <button onClick={handleSearch} type="submit" value="Buscar" className="bg-transparent">
+                <button onClick={ () => fetchDirectories() } type="button" value="Buscar" className="bg-transparent">
                     <BsSearch size={30} color="#fff" />
                 </button>
-            </form>
+            </div>
+
+            <div className="text-white mb-5 px-2 py-2 ">
+                {results.map((result) => 
+                    <div 
+                        onClick={() => onSelect(result)}
+                    >
+                        {result.path}
+                    </div>
+                )}
+            </div>
         </main>
     )
 }

@@ -4,25 +4,27 @@ import FilesListing from "@/components/FileExplorer/FilesListing.tsx";
 import {useNavigation} from "@/providers/FileNavigationProvider.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import Search from "@/components/Search/Search";
+import { DirectoryModel } from "@/utils/models/Directory.model";
 
 export function FileExplorer() {
     const {actions, history} = useNavigation();
 
     const [selectedDirectory, setSelectedDirectory] = useState<string>("/");
-    const [searchTerm, setSearchTerm] = useState("")
 
     useEffect(() => {
         actions.setAs("/")
     }, []);
 
-    const handleSearch = (term: string) => {
-        setSearchTerm(term);
-    }
+    const handleSearch = (term: DirectoryModel) => {
+        const lastDir = term.type == "file" ? term.path.split("/").slice(0, -1).join("/"): term.path;
+        setSelectedDirectory(lastDir);
+        actions.add(lastDir);
+    };
 
 
     return (
         <>
-            <Search onSearch={handleSearch} />
+            <Search onSelect={(result) => handleSearch(result)} />
                 <div className="flex flex-col items-center">
                     <DialogCreateDirectoryItem/>
                         {history.length >= 2 &&
@@ -33,7 +35,7 @@ export function FileExplorer() {
                         }
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                    <FilesListing path={selectedDirectory} setPath={setSelectedDirectory} searchTerm={searchTerm} />
+                    <FilesListing path={selectedDirectory} setPath={setSelectedDirectory} />
                 </div>
         </>
     )
