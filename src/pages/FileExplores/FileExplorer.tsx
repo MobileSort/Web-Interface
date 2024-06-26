@@ -4,6 +4,7 @@ import FilesListing from "@/components/FileExplorer/FilesListing.tsx";
 import {useNavigation} from "@/providers/FileNavigationProvider.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import Search from "@/components/Search/Search";
+import DialogDeleteDirectoryItem from "@/components/Dialog/DiologDeleteDirectoryItem.tsx";
 
 export function FileExplorer() {
     const {actions, history} = useNavigation();
@@ -24,7 +25,8 @@ export function FileExplorer() {
         <>
             <Search onSearch={handleSearch} />
                 <div className="flex flex-col items-center">
-                    <DialogCreateDirectoryItem/>
+                    <DialogCreateDirectoryItem path={selectedDirectory}/>
+                    <DialogDeleteDirectoryItem/>
                         {history.length >= 2 &&
                             <Button className="mb-2" title={"<- Go Back"} onClick={() => {
                                 const directoryLastIndex = actions.pop().slice(-1);
