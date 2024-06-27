@@ -10,19 +10,8 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
-import {Delete} from "lucide-react";
-import {data} from "autoprefixer";
 import axios from "axios";
-import {handler} from "tailwindcss-animate";
-import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import {string} from "yup";
-import * as url from "node:url";
 
-const schema = yup.object().shape({
-    del: yup.string().required(),
-});
 
 interface Props {
     directory: DirectoryModel,
@@ -31,13 +20,10 @@ interface Props {
 
 const DirectoryElement = ({directory, onClick}: Props) => {
     const directoryName = directory.path.split("/").slice(-1) || "N/A";
-    const {
-        handleSubmit,
-    } = useForm({resolver: yupResolver(schema),});
-    const onSubmit = (data: {del:string;}) => {
-        const url = data.del == 'https://localhost:7213/api/Directory/RemoveItem'
+    const onSubmit = () => {
+        const url = 'http://localhost:5033/api/Directory/RemoveItem'
         axios
-            .post(url)
+            .delete(url, {data:{path:directory.path}})
             .then((res) => res.data as DirectoryModel)
     }
 
@@ -61,7 +47,7 @@ const DirectoryElement = ({directory, onClick}: Props) => {
                          <DialogTitle>Deseja Excluir Esse Item</DialogTitle>
                      </DialogHeader>
                      <DialogFooter>
-                         <Button type={"button"} onClick={handleSubmit(onSubmit)}>
+                         <Button type={"button"} onClick={()=>onSubmit()}>
                              Deletar!
                          </Button>
                      </DialogFooter>
