@@ -11,7 +11,7 @@ export function Tag(){
 
     const fetchTags = (): Promise<TagsModel[]> => {
         return axios
-            .post('http://localhost:5033/api/Tag/ListTags'
+            .post('http://localhost:7213/api/Tag/ListTags'
             )
             .then((res) => res.data as TagsModel[])
     }
