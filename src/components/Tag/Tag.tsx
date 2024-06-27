@@ -6,8 +6,30 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { TagsModel } from "@/utils/models/Tags.model";
 import { useQuery } from "@tanstack/react-query";
+import * as yup from "yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+    NomeTag: yup.string().required(),
+    ColorTag: yup.string().required(),
+    IdTypeTag: yup.number().required(),
+    ValueTag: yup.string().required(),
+});
 
 export function Tag(){
+
+    const {
+        handleSubmit,
+        register,
+        setValue
+    } = useForm({resolver: yupResolver(schema),});
+    const onSubmit = (data: {NomeTag: string; ColorTag: string; IdTypeTag: number; ValueTag: string;}) => {
+        const url = 'http://localhost:5033/api/Tag/AddTag'
+        axios
+            .post(url, {  name: data.NomeTag, color: data.ColorTag, typeTag: 0, valueTag: data.ValueTag})
+            .then(() => {})
+    }
 
     const fetchTags = (): Promise<TagsModel[]> => {
         return axios
@@ -66,7 +88,7 @@ export function Tag(){
                         </label>
                     </div>
                     <DialogFooter>
-                        <Button type={"button"}>
+                        <Button type={"button"} onClick={handleSubmit(onSubmit)}>
                             Salvar!
                         </Button>
                     </DialogFooter>
