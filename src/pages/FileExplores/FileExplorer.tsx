@@ -28,7 +28,7 @@ export function FileExplorer() {
         <>
             <div>
                 <Search onSelect={(result) => handleSearch(result)} />
-                <div className="absolute right-0">
+                <div className="absolute right-1/3">
                     <Tag />
                     <Order path={selectedDirectory}/>
                 </div>

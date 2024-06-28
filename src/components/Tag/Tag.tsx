@@ -8,6 +8,8 @@ import { TypeTagModel } from "@/utils/models/TypeTag.model";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import Chip from '@mui/material/Chip';
 
 const schema = yup.object().shape({
     NomeTag: yup.string().required(),
@@ -53,8 +55,14 @@ export function Tag(){
         queryKey: ['typeTags'],
         queryFn: () => fetchTypeTags(),
     })
-
-
+    
+    const onDelete = (tag: TagsModel) => {
+        const url = 'http://localhost:5033/api/Tag/RemoveTag'
+        debugger
+        axios
+            .delete(url, {data:{Idtag:tag.idTag}})
+            .then(() =>{})
+    }
 
     return(
         <>
@@ -66,14 +74,14 @@ export function Tag(){
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Tags existentes</DialogTitle>
-                        <div className="mb-5 px-2 py-2 flex flex-col items-center border border-black rounded-md">
+                            <div className="mb-5 px-2 py-2 flex items-center border border-black rounded-md">
                             {isLoadingTags ? "...Loading" :
                                 tags &&
                                 tags.map((tag) =>
-                                    tag.name
+                                    <Chip label={tag.name} color="primary" onDelete={() => onDelete(tag)} />
                                 )
                             }    
-                        </div> 
+                            </div>
                         <DialogTitle>Adicionar item</DialogTitle>
                     
                         <div className="h-[40%] w-[90%] p-4 pr-8">
@@ -82,31 +90,20 @@ export function Tag(){
                                     <input className="w-[95%] border-2 border-black mb-2 mt-2"  type="text"
                                 />
                             </label>
-                            <label>
-                                Selecione o tipo da Tag:
 
-                            <div className="border rounded border-black border-1">
-                                {isLoadingTypeTags ? "...Loading" :
-                                    typeTags &&
-                                    typeTags.map((typeTag) =>
-                                        typeTag.description
+                            {(!isLoadingTypeTags && typeTags) &&
+                            <Select onValueChange={(e) => setValue("IdTypeTag",parseInt(e))}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Selecione"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {typeTags && typeTags.map((typeTags) =>
+                                        <SelectItem value={typeTags.idTypeTag + ""}>{typeTags.description}</SelectItem>
                                     )
-                                } 
-                            </div>    
-                                    {/* <div className="flex items-center space-x-2 mt-2 mb-2">
-                                        <RadioGroupItem value="TagExt" id="TagExt" />
-                                        <Label htmlFor="TagExt">Extensão</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2 mt-2 mb-2">
-                                        <RadioGroupItem value="Pasta" id="Pasta" />
-                                        <Label htmlFor="Pasta">Pasta</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2 mt-2 mb-2">
-                                        <RadioGroupItem value="Arquivo" id="Arquivo" />
-                                        <Label htmlFor="Arquivo">Arquivo</Label>
-                                    </div> */}
-                                    
-                            </label>
+                                    }
+                                </SelectContent>
+                            </Select>
+                            }
                         </div>
                     </DialogHeader>
                     <DialogFooter>
