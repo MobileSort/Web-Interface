@@ -10,6 +10,16 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import Chip from '@mui/material/Chip';
+import React from 'react';
+import { SketchPicker } from 'react-color';
+import {Label} from "@/components/ui/label.tsx";
+
+class Component extends React.Component {
+
+    render() {
+        return <SketchPicker />;
+    }
+}
 
 const schema = yup.object().shape({
     NomeTag: yup.string().required(),
@@ -82,7 +92,7 @@ export function Tag(){
                                 )
                             }    
                             </div>
-                        <DialogTitle>Adicionar item</DialogTitle>
+                        <DialogTitle>Adicionar Tag</DialogTitle>
                     
                         <div className="h-[40%] w-[90%] p-4 pr-8">
                             <label>
@@ -104,6 +114,18 @@ export function Tag(){
                                 </SelectContent>
                             </Select>
                             }
+                            <Label>
+                                Nome
+                            <input type={"text"} {...register("NomeTag")}/>
+                            </Label>
+                            <Label>
+                                Selecione a cor
+                                <input type={"color"} {...register("ColorTag")}/>
+                            </Label>
+                            <Label>
+                                Valor
+                            <input type={"text"} {...register("ValueTag")}/>
+                            </Label>
                         </div>
                     </DialogHeader>
                     <DialogFooter>
