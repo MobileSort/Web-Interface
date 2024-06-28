@@ -5,7 +5,6 @@ import {useNavigation} from "@/providers/FileNavigationProvider.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import Search from "@/components/Search/Search";
 import { DirectoryModel } from "@/utils/models/Directory.model";
-import {Delete} from "lucide-react";
 import {Tag} from "@/components/Tag/Tag.tsx";
 import {Order} from "@/components/Order/Order.tsx";
 
@@ -13,8 +12,6 @@ export function FileExplorer() {
     const {actions, history} = useNavigation();
 
     const [selectedDirectory, setSelectedDirectory] = useState<string>("/");
-
-    const [DelItem] = useState<string>("/");
 
     useEffect(() => {
         actions.setAs("/")
