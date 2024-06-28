@@ -38,6 +38,7 @@ const FilesListing = ({path, setPath}: Props) => {
                 androidDirectory &&
                 androidDirectory.files?.map((dir) =>
                     <DirectoryElement
+                        onDelete={() => refetch()}
                         directory={dir}
                         onClick={() => {
                             setPath(dir.path)
