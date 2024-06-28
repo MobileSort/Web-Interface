@@ -2,10 +2,9 @@ import axios from "axios";
 import { BsTags} from "react-icons/bs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Label } from "../ui/label";
 import { TagsModel } from "@/utils/models/Tags.model";
 import { useQuery } from "@tanstack/react-query";
+import { TypeTagModel } from "@/utils/models/TypeTag.model";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -38,10 +37,24 @@ export function Tag(){
             .then((res) => res.data as TagsModel[])
     }
 
-    const {isLoading, data: tags} = useQuery({
+    const {isLoading:isLoadingTags, data: tags} = useQuery({
         queryKey: ['tags'],
         queryFn: () => fetchTags(),
     })
+
+    const fetchTypeTags = (): Promise<TypeTagModel[]> => {
+        return axios
+            .post('http://localhost:5033/api/Tag/ListTypeTags'
+            )
+            .then((res) => res.data as TypeTagModel[])
+    }
+
+    const {isLoading:isLoadingTypeTags, data: typeTags} = useQuery({
+        queryKey: ['typeTags'],
+        queryFn: () => fetchTypeTags(),
+    })
+
+
 
     return(
         <>
@@ -53,8 +66,8 @@ export function Tag(){
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Tags existentes</DialogTitle>
-                        <div className="mb-5 px-2 py-2 flex flex-col items-center">
-                            {isLoading ? "...Loading" :
+                        <div className="mb-5 px-2 py-2 flex flex-col items-center border border-black rounded-md">
+                            {isLoadingTags ? "...Loading" :
                                 tags &&
                                 tags.map((tag) =>
                                     tag.name
@@ -62,31 +75,40 @@ export function Tag(){
                             }    
                         </div> 
                         <DialogTitle>Adicionar item</DialogTitle>
+                    
+                        <div className="h-[40%] w-[90%] p-4 pr-8">
+                            <label>
+                                Nome da Tag:
+                                    <input className="w-[95%] border-2 border-black mb-2 mt-2"  type="text"
+                                />
+                            </label>
+                            <label>
+                                Selecione o tipo da Tag:
+
+                            <div className="border rounded border-black border-1">
+                                {isLoadingTypeTags ? "...Loading" :
+                                    typeTags &&
+                                    typeTags.map((typeTag) =>
+                                        typeTag.description
+                                    )
+                                } 
+                            </div>    
+                                    {/* <div className="flex items-center space-x-2 mt-2 mb-2">
+                                        <RadioGroupItem value="TagExt" id="TagExt" />
+                                        <Label htmlFor="TagExt">Extensão</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2 mt-2 mb-2">
+                                        <RadioGroupItem value="Pasta" id="Pasta" />
+                                        <Label htmlFor="Pasta">Pasta</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2 mt-2 mb-2">
+                                        <RadioGroupItem value="Arquivo" id="Arquivo" />
+                                        <Label htmlFor="Arquivo">Arquivo</Label>
+                                    </div> */}
+                                    
+                            </label>
+                        </div>
                     </DialogHeader>
-                    <div className="h-[40%] w-[90%] p-4 pr-8">
-                        <label>
-                            Nome da Tag:
-                                <input className="w-[95%] border-2 border-black mb-2 mt-2"  type="text"
-                            />
-                        </label>
-                        <label>
-                            Selecione o tipo da Tag:
-                            <RadioGroup>
-                                <div className="flex items-center space-x-2 mt-2 mb-2">
-                                    <RadioGroupItem value="TagExt" id="TagExt" />
-                                    <Label htmlFor="TagExt">Extensão</Label>
-                                </div>
-                                <div className="flex items-center space-x-2 mt-2 mb-2">
-                                    <RadioGroupItem value="Pasta" id="Pasta" />
-                                    <Label htmlFor="Pasta">Pasta</Label>
-                                </div>
-                                <div className="flex items-center space-x-2 mt-2 mb-2">
-                                    <RadioGroupItem value="Arquivo" id="Arquivo" />
-                                    <Label htmlFor="Arquivo">Arquivo</Label>
-                                </div>
-                            </RadioGroup>
-                        </label>
-                    </div>
                     <DialogFooter>
                         <Button type={"button"} onClick={handleSubmit(onSubmit)}>
                             Salvar!
