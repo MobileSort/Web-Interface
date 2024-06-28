@@ -6,6 +6,8 @@ import {Button} from "@/components/ui/button.tsx";
 import Search from "@/components/Search/Search";
 import { DirectoryModel } from "@/utils/models/Directory.model";
 import {Delete} from "lucide-react";
+import {Tag} from "@/components/Tag/Tag.tsx";
+import {Order} from "@/components/Order/Order.tsx";
 
 export function FileExplorer() {
     const {actions, history} = useNavigation();
@@ -26,9 +28,15 @@ export function FileExplorer() {
 
 
     return (
-        <>  
+        <>
+            <div>
                 <Search onSelect={(result) => handleSearch(result)} />
-            
+                <div className="absolute right-0">
+                    <Tag />
+                    <Order path={selectedDirectory}/>
+                </div>
+            </div>
+
                 <div className="flex flex-col items-center">
                     <DialogCreateDirectoryItem path={selectedDirectory}/>
                         {history.length >= 2 &&
