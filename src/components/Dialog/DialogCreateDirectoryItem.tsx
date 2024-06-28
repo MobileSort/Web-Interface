@@ -12,7 +12,6 @@ import {Button} from "@/components/ui/button.tsx";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import {DirectoryModel} from "@/utils/models/Directory.model.ts";
 
 const schema = yup.object().shape({
     NomeItem: yup.string().required(),
@@ -21,9 +20,10 @@ const schema = yup.object().shape({
 
 interface Props {
     path: string,
+    onCreate:() => void,
 }
 
-const DialogCreateDirectoryItem = ({path}: Props) => {
+const DialogCreateDirectoryItem = ({path, onCreate}: Props) => {
 
         const {
             handleSubmit,
@@ -41,47 +41,47 @@ const DialogCreateDirectoryItem = ({path}: Props) => {
             }
             axios
                 .post(url, model)
-                .then((res) => res.data as DirectoryModel)
+                .then(() => onCreate())
         }
 
     return (
         <div className="flex items-center justify-between gap-3">
             <Dialog>
-                    <DialogTrigger
-                        className="mb-7 bg-blue-600 h-9 rounded-md text-white font-medium gap-4 flex flex-col justify-center items-center px-3 py-4">
-                        + Adicionar
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Adicionar item</DialogTitle>
-                        </DialogHeader>
-                            <div className="h-[40%] w-[90%] p-4 pr-8 ">
-                                <label>
-                                    Nome Item:
-                                    <input className="w-[95%] border-2 border-black"  type="text"
-                                           {...register("NomeItem")}
-                                    />
-                                </label>
-                                <label>
-                                    Selecione o tipo do Item:
-                                    <RadioGroup onValueChange={(e)=>setValue("TipoItem", e)} defaultValue={""}>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="Arquivo" id="Arquivo" />
-                                            <Label htmlFor="Arquivo">Arquivo</Label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="Pasta" id="Pasta" />
-                                            <Label htmlFor="Pasta">Pasta</Label>
-                                        </div>
-                                    </RadioGroup>
-                                </label>
-                            </div>
-                            <DialogFooter>
-                                <Button type={"button"} onClick={handleSubmit(onSubmit)}>
-                                    Salvar!
-                                </Button>
-                            </DialogFooter>
-                    </DialogContent>
+                <DialogTrigger
+                    className="mb-7 bg-blue-600 h-9 rounded-md text-white font-medium gap-4 flex flex-col justify-center items-center px-3 py-4">
+                    + Adicionar
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Adicionar item</DialogTitle>
+                    </DialogHeader>
+                        <div className="h-[40%] w-[90%] p-4 pr-8 ">
+                            <label>
+                                Nome Item:
+                                <input className="w-[95%] border-2 border-black"  type="text"
+                                        {...register("NomeItem")}
+                                />
+                            </label>
+                            <label>
+                                Selecione o tipo do Item:
+                                <RadioGroup onValueChange={(e)=>setValue("TipoItem", e)} defaultValue={""}>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="Arquivo" id="Arquivo" />
+                                        <Label htmlFor="Arquivo">Arquivo</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="Pasta" id="Pasta" />
+                                        <Label htmlFor="Pasta">Pasta</Label>
+                                    </div>
+                                </RadioGroup>
+                            </label>
+                        </div>
+                        <DialogFooter>
+                            <Button type={"button"} onClick={handleSubmit(onSubmit)}>
+                                Salvar!
+                            </Button>
+                        </DialogFooter>
+                </DialogContent>
             </Dialog>
         </div>
     )

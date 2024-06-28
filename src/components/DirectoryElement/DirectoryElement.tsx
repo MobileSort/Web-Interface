@@ -16,15 +16,17 @@ import axios from "axios";
 interface Props {
     directory: DirectoryModel,
     onClick?: () => void,
+    onDelete:() => void,
 }
 
-const DirectoryElement = ({directory, onClick}: Props) => {
+const DirectoryElement = ({directory, onClick, onDelete}: Props) => {
     const directoryName = directory.path.split("/").slice(-1) || "N/A";
+
     const onSubmit = () => {
         const url = 'http://localhost:5033/api/Directory/RemoveItem'
         axios
             .delete(url, {data:{path:directory.path}})
-            .then((res) => res.data as DirectoryModel)
+            .then(() => {onDelete()})
     }
 
     return (

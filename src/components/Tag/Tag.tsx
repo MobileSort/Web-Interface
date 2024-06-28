@@ -39,7 +39,7 @@ export function Tag(){
             .then((res) => res.data as TagsModel[])
     }
 
-    const {isLoading:isLoadingTags, data: tags} = useQuery({
+    const {isLoading:isLoadingTags, data: tags, refetch} = useQuery({
         queryKey: ['tags'],
         queryFn: () => fetchTags(),
     })
@@ -58,11 +58,11 @@ export function Tag(){
     
     const onDelete = (tag: TagsModel) => {
         const url = 'http://localhost:5033/api/Tag/RemoveTag'
-        debugger
         axios
             .delete(url, {data:{Idtag:tag.idTag}})
-            .then(() =>{})
+            .then(() =>{refetch()})
     }
+
 
     return(
         <>

@@ -14,7 +14,7 @@ export function FileExplorer() {
     const [selectedDirectory, setSelectedDirectory] = useState<string>("/");
 
     useEffect(() => {
-        actions.setAs("/")
+        reload()
     }, []);
 
     const handleSearch = (term: DirectoryModel) => {
@@ -23,6 +23,10 @@ export function FileExplorer() {
         actions.add(lastDir);
     };
 
+    const reload = () => {
+        actions.setAs("/")
+        setSelectedDirectory("/")
+    }
 
     return (
         <>
@@ -34,18 +38,18 @@ export function FileExplorer() {
                 </div>
             </div>
 
-                <div className="flex flex-col items-center">
-                    <DialogCreateDirectoryItem path={selectedDirectory}/>
-                        {history.length >= 2 &&
-                            <Button className="mb-2" title={"<- Go Back"} onClick={() => {
-                                const directoryLastIndex = actions.pop().slice(-1);
-                                setSelectedDirectory(directoryLastIndex[0]);
-                            }}>&lt;- Go Back</Button>
-                        }
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                    <FilesListing path={selectedDirectory} setPath={setSelectedDirectory} />
-                </div>
+            <div className="flex flex-col items-center">
+                <DialogCreateDirectoryItem path={selectedDirectory} onCreate={() => reload()} />
+                    {history.length >= 2 &&
+                        <Button  className="mb-2" title={"<- Go Back"} onClick={() => {
+                            const directoryLastIndex = actions.pop().slice(-1);
+                            setSelectedDirectory(directoryLastIndex[0]);
+                        }}>&lt;- Go Back</Button>
+                    }
+            </div>
+            <div className="flex flex-col items-center gap-1">
+                <FilesListing path={selectedDirectory} setPath={setSelectedDirectory} />
+            </div>
         </>
     )
 }
