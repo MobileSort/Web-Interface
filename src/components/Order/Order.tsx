@@ -54,8 +54,8 @@ export function Order({path}:{path: string}) {
     return (
         <div className="flex items-center justify-between">
             <Dialog>
-                <DialogTrigger>
-                    <LuArrowDownUp size={30} color="#fff"/>
+                <DialogTrigger className="mb-7 bg-blue-600 h-9 rounded-md text-white font-medium gap-4 flex flex-col justify-center items-center px-3 py-4">
+                    Organizar
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
