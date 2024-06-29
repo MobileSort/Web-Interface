@@ -16,6 +16,7 @@ import {useQuery} from "@tanstack/react-query";
 import * as yup from "yup";
 import {OrderingModel} from "@/utils/models/Ordering.model.ts";
 import {Label} from "@/components/ui/label.tsx";
+import DialogSelectDirectory from "@/components/Dialog/DialogSelectDirectory.tsx";
 
 
 const schemaOrder = yup.object().shape({
@@ -72,7 +73,7 @@ const DialogOrdering = () => {
     }
 
     const {isLoading: isLoadingTags, data: tags} = useQuery({
-        queryKey: ['tags'],
+        queryKey: ['ordering-tags'],
         queryFn: () => fetchTags(),
     })
 
@@ -114,8 +115,7 @@ const DialogOrdering = () => {
                         </Label>
                         <Label>
                             Selecione o diretório
-                            <input className="w-[95%] border-2 border-black" type="text" {...register("DirectoryDestination")}
-                            />
+                            <DialogSelectDirectory select={(selected) => {setValue("DirectoryDestination",selected)}}/>
                         </Label>
                         <br/>
                         <Label>

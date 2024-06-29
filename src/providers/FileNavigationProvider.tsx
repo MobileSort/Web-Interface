@@ -5,21 +5,44 @@ import FolderActionsModel from "@/utils/models/FolderActions.model.ts";
 const NavigationContext = createContext<FolderNavigationModel | null>(null);
 
 function NavigationProvider({children}: { children: ReactElement }) {
-    const [history, setHistory] = useState<string[]>([]); // useState inside the component
+    const [historyListing, setHistoryListing] = useState<string[]>([]); // useState inside the component
+    const [historySelecting, setHistorySelecting] = useState<string[]>([]); // useState inside the component
 
-    const actions: FolderActionsModel = {
+    const actionsListing: FolderActionsModel = {
         add(path: string) {
-            setHistory((prevState) => [...prevState, path]);
+            setHistoryListing((prevState) => [...prevState, path]);
         },
         clear() {
-            setHistory([]);
+            setHistoryListing([]);
         },
         setAs(path: string) {
-            setHistory([path])
+            setHistoryListing([path])
         },
         pop() {
             let newHistory: string[] = [];
-            setHistory((prevState) => {
+            setHistoryListing((prevState) => {
+                let historyCopy = [...prevState];
+                historyCopy.pop();
+                newHistory = historyCopy
+                return historyCopy;
+            });
+            return newHistory;
+        }
+    };
+
+    const actionsSelecting: FolderActionsModel = {
+        add(path: string) {
+            setHistorySelecting((prevState) => [...prevState, path]);
+        },
+        clear() {
+            setHistorySelecting([]);
+        },
+        setAs(path: string) {
+            setHistorySelecting([path])
+        },
+        pop() {
+            let newHistory: string[] = [];
+            setHistorySelecting((prevState) => {
                 let historyCopy = [...prevState];
                 historyCopy.pop();
                 newHistory = historyCopy
@@ -30,7 +53,10 @@ function NavigationProvider({children}: { children: ReactElement }) {
     };
 
     return (
-        <NavigationContext.Provider value={{history, actions} as FolderNavigationModel}>
+        <NavigationContext.Provider value={{
+            listing: {historyListing, actionsListing},
+            selecting: {historySelecting, actionsSelecting}
+        } as FolderNavigationModel}>
             {children}
         </NavigationContext.Provider>
     );

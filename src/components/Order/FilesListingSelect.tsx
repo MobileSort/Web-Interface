@@ -10,9 +10,9 @@ interface Props {
     setPath: Dispatch<SetStateAction<string>>
 }
 
-const FilesListing = ({path, setPath}: Props) => {
-    const {listing} = useNavigation();
-    const {actionsListing} = listing
+const FilesListingSelect = ({path, setPath}: Props) => {
+    const {selecting} = useNavigation();
+    const {actionsSelecting} = selecting
     const fetchDirectories = (): Promise<DirectoryModel> => {
         return axios
             .post('http://localhost:5033/api/Directory/ListDirectory',
@@ -24,7 +24,7 @@ const FilesListing = ({path, setPath}: Props) => {
     }
 
     const {isLoading, data: androidDirectory, refetch} = useQuery({
-        queryKey: ['listing-directories'],
+        queryKey: ['selecting-directories'],
         queryFn: () => fetchDirectories(),
     })
 
@@ -42,7 +42,7 @@ const FilesListing = ({path, setPath}: Props) => {
                         directory={dir}
                         onClick={() => {
                             setPath(dir.path)
-                            actionsListing.add(dir.path);
+                            actionsSelecting.add(dir.path);
                         }}
                     />
                 )
@@ -52,4 +52,4 @@ const FilesListing = ({path, setPath}: Props) => {
     )
 }
 
-export default FilesListing;
+export default FilesListingSelect;

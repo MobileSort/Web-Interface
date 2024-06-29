@@ -10,8 +10,8 @@ import {Order} from "@/components/Order/Order.tsx";
 import DialogOrdering from "@/components/Dialog/DialogOrdering.tsx";
 
 export function FileExplorer() {
-    const {actions, history} = useNavigation();
-
+    const { listing} = useNavigation();
+    const { actionsListing, historyListing } = listing
     const [selectedDirectory, setSelectedDirectory] = useState<string>("/");
 
     useEffect(() => {
@@ -21,11 +21,11 @@ export function FileExplorer() {
     const handleSearch = (term: DirectoryModel) => {
         const lastDir = term.type == "file" ? term.path.split("/").slice(0, -1).join("/") : term.path;
         setSelectedDirectory(lastDir);
-        actions.add(lastDir);
+        actionsListing.add(lastDir);
     };
 
     const reload = () => {
-        actions.setAs("/")
+        actionsListing.setAs("/")
         setSelectedDirectory("/")
     }
 
@@ -44,9 +44,9 @@ export function FileExplorer() {
                     <DialogCreateDirectoryItem path={selectedDirectory} onCreate={() => reload()} />
                     <Order path={selectedDirectory}/>
                 </>
-                {history.length >= 2 &&
+                {historyListing.length >= 2 &&
                     <Button className="mb-2" title={"<- Go Back"} onClick={() => {
-                        const directoryLastIndex = actions.pop().slice(-1);
+                        const directoryLastIndex = actionsListing.pop().slice(-1);
                         setSelectedDirectory(directoryLastIndex[0]);
                     }}>&lt;- Go Back</Button>
                 }
