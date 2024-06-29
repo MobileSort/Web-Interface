@@ -10,16 +10,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import Chip from '@mui/material/Chip';
-import React from 'react';
-import { SketchPicker } from 'react-color';
 import {Label} from "@/components/ui/label.tsx";
-
-class Component extends React.Component {
-
-    render() {
-        return <SketchPicker />;
-    }
-}
 
 const schema = yup.object().shape({
     NomeTag: yup.string().required(),

@@ -16,6 +16,7 @@ import {useQuery} from "@tanstack/react-query";
 import * as yup from "yup";
 import {OrderingModel} from "@/utils/models/Ordering.model.ts";
 import {Label} from "@/components/ui/label.tsx";
+import { Chip } from "@mui/material";
 
 
 const schemaOrder = yup.object().shape({
@@ -42,7 +43,7 @@ const DialogOrdering = () => {
 
     const selectedTags = watch("Tags");
 
-    const createOrdering = (data: { NameOrdering: string; DirectoryDestination: string; Tags: [] }) => {
+    const createOrdering = (data: { NameOrdering: string; DirectoryDestination: string; Tags: any[] }) => {
         const url = 'http://localhost:5033/api/Ordering/AddOrdering'
         console.log({data})
         const tags = data.Tags.map((tag: TagsModel) => tag.idTag)
@@ -78,6 +79,10 @@ const DialogOrdering = () => {
 
     const AddTag = (tag: TagsModel) => {
         let selected = [...selectedTags];
+        if(selected.findIndex((select: TagsModel) => select.idTag == tag.idTag) != -1){
+            return;
+        }
+
         selected.push(tag)
         setValue("Tags", selected)
     }
@@ -97,11 +102,11 @@ const DialogOrdering = () => {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Organizações Criadas</DialogTitle>
-                        <div className="mb-5 px-2 py-2 flex flex-col items-center border border-black rounded-md">
+                        <div className="mb-5 px-2 py-2 flex gap-1 items-center border border-black rounded-md">
                             {isLoadingOrderings ? "...Loading" :
                                 orderings &&
                                 orderings.map((ordering) =>
-                                    ordering.name
+                                    <Chip label={ordering.name} color="primary" />
                                 )
                             }
                         </div>
@@ -109,37 +114,36 @@ const DialogOrdering = () => {
                     <div className="h-[40%] w-[90%] p-4 pr-8 ">
                         <Label>
                             Nome da ordenação:
-                            <input className="w-[95%] border-2 border-black" type="text" {...register("NameOrdering")}
+                            <input className="w-[95%] border-2 border-black mb-3" type="text" {...register("NameOrdering")}
                             />
                         </Label>
                         <Label>
                             Selecione o diretório
-                            <input className="w-[95%] border-2 border-black" type="text" {...register("DirectoryDestination")}
+                            <input className="w-[95%] border-2 border-black mb-3" type="text" {...register("DirectoryDestination")}
                             />
                         </Label>
                         <br/>
                         <Label>
+                            <div className="flex gap-1 items-center">
                             {
                                 selectedTags &&
                                 selectedTags.map((tag) =>
                                     <>
-                                        <span onClick={() => RemoveTag(tag)}>
-                                            {tag.name}
-                                        </span>
-                                        <br/>
+                                        <Chip label={tag.name} onDelete={() => RemoveTag(tag)} color="primary" className="mr-1" />
                                     </>
                                 )
                             }
-                            <br/>
-                            Selecione as tags
+                            </div>
+                            <div className="mt-3 gap-1 flex items-center">
+                            Selecione as tags:
                             {(!isLoadingTags && tags) &&
                                 tags && tags.map((tag) =>
                                     <>
-                                        <span onClick={() => AddTag(tag)}>{tag.name}</span>
-                                        <br/>
+                                        <Chip label={tag.name} onClick={() => AddTag(tag)} color="secondary" />
                                     </>
                                 )
                             }
+                            </div>
                         </Label>
                     </div>
                     <DialogFooter>

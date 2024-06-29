@@ -1,4 +1,3 @@
-import {LuArrowDownUp} from "react-icons/lu";
 import {
     Dialog,
     DialogContent,
@@ -8,11 +7,10 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {TagsModel} from "@/utils/models/Tags.model.ts";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {OrderingModel} from "@/utils/models/Ordering.model.ts";
-import {ReactNode, useState} from "react";
+import {useState} from "react";
 import {
     Select,
     SelectContent,
