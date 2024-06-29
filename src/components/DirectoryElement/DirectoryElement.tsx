@@ -16,13 +16,17 @@ import axios from "axios";
 interface Props {
     directory: DirectoryModel,
     onClick?: () => void,
-    onDelete:() => void,
+    onDelete?:() => void,
 }
 
 const DirectoryElement = ({directory, onClick, onDelete}: Props) => {
     const directoryName = directory.path.split("/").slice(-1) || "N/A";
 
     const onSubmit = () => {
+        if(!onDelete){
+            return
+        }
+
         const url = 'http://localhost:5033/api/Directory/RemoveItem'
         axios
             .delete(url, {data:{path:directory.path}})
@@ -38,24 +42,24 @@ const DirectoryElement = ({directory, onClick, onDelete}: Props) => {
              directoryName
              }
          </div>
-         <div>
-             <Dialog>
-                 <DialogTrigger
-                        className="mb-7 bg-red-600 h-9 rounded-md text-white font-medium gap-4 flex flex-col justify-center items-center px-3 py-4">
-                        - Deletar
-                 </DialogTrigger>
-                 <DialogContent>
-                     <DialogHeader>
-                         <DialogTitle>Deseja Excluir Esse Item</DialogTitle>
-                     </DialogHeader>
-                     <DialogFooter>
-                         <Button type={"button"} onClick={()=>onSubmit()}>
-                             Deletar!
-                         </Button>
-                     </DialogFooter>
-                 </DialogContent>
-             </Dialog>
-         </div>
+           {onDelete && <div>
+               <Dialog>
+                   <DialogTrigger
+                       className="mb-7 bg-red-600 h-9 rounded-md text-white font-medium gap-4 flex flex-col justify-center items-center px-3 py-4">
+                       - Deletar
+                   </DialogTrigger>
+                   <DialogContent>
+                       <DialogHeader>
+                           <DialogTitle>Deseja Excluir Esse Item</DialogTitle>
+                       </DialogHeader>
+                       <DialogFooter>
+                           <Button type={"button"} onClick={() => onSubmit()}>
+                               Deletar!
+                           </Button>
+                       </DialogFooter>
+                   </DialogContent>
+               </Dialog>
+           </div>}
        </>
     )
 }

@@ -18,6 +18,8 @@ import {OrderingModel} from "@/utils/models/Ordering.model.ts";
 import {Label} from "@/components/ui/label.tsx";
 import DialogSelectDirectory from "@/components/Dialog/DialogSelectDirectory.tsx";
 import { Chip } from "@mui/material";
+import {useState} from "react";
+import {useToast} from "@/components/ui/use-toast.ts";
 
 
 const schemaOrder = yup.object().shape({
@@ -27,7 +29,8 @@ const schemaOrder = yup.object().shape({
 });
 
 const DialogOrdering = () => {
-
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const { toast } = useToast()
     const {
         handleSubmit,
         register,
@@ -50,7 +53,14 @@ const DialogOrdering = () => {
         const tags = data.Tags.map((tag: TagsModel) => tag.idTag)
         axios
             .post(url, {name: data.NameOrdering, tags: tags, directoryDestination: data.DirectoryDestination})
-            .then(() => {
+            .then((res) => {
+                if(res.status !== 200){
+                    return
+                }
+                setDialogOpen(false)
+                toast({
+                    description: "Ordenação cadastrada com sucesso"
+                })
             })
     }
 
@@ -96,7 +106,7 @@ const DialogOrdering = () => {
 
     return (
         <div className="flex items-center justify-between gap-3">
-            <Dialog>
+            <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
                 <DialogTrigger>
                     <LuArrowDownUp size={30} color="#fff"/>
                 </DialogTrigger>

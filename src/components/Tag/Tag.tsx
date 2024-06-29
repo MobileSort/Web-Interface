@@ -56,7 +56,7 @@ export function Tag(){
         queryKey: ['typeTags'],
         queryFn: () => fetchTypeTags(),
     })
-    
+
     const onDelete = (tag: TagsModel) => {
         const url = 'http://localhost:5033/api/Tag/RemoveTag'
         axios
@@ -81,17 +81,11 @@ export function Tag(){
                                 tags.map((tag) =>
                                     <Chip label={tag.name} color="primary" onDelete={() => onDelete(tag)} />
                                 )
-                            }    
+                            }
                             </div>
                         <DialogTitle>Adicionar Tag</DialogTitle>
-                    
-                        <div className="h-[40%] w-[90%] p-4 pr-8">
-                            <label>
-                                Nome da Tag:
-                                    <input className="w-[95%] border-2 border-black mb-2 mt-2"  type="text"
-                                />
-                            </label>
 
+                        <div className="h-[40%] w-[90%] p-4 pr-8">
                             {(!isLoadingTypeTags && typeTags) &&
                             <Select onValueChange={(e) => setValue("IdTypeTag",parseInt(e))}>
                                 <SelectTrigger className="w-[180px]">
