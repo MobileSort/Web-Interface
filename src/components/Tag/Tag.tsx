@@ -29,7 +29,7 @@ export function Tag(){
     const onSubmit = (data: {NomeTag: string; ColorTag: string; IdTypeTag: number; ValueTag: string;}) => {
         const url = 'http://localhost:5033/api/Tag/AddTag'
         axios
-            .post(url, {  name: data.NomeTag, color: data.ColorTag, typeTag: 0, valueTag: data.ValueTag})
+            .post(url, {  name: data.NomeTag, color: data.ColorTag, typeTag: data.IdTypeTag, valueTag: data.ValueTag})
             .then(() => {})
     }
 
@@ -99,14 +99,17 @@ export function Tag(){
                                 </SelectContent>
                             </Select>
                             }
+                            <br/>
                             <Label>
                                 Nome
                             <input type={"text"} {...register("NomeTag")}/>
                             </Label>
+                            <br/>
                             <Label>
                                 Selecione a cor
                                 <input type={"color"} {...register("ColorTag")}/>
                             </Label>
+                            <br/>
                             <Label>
                                 Valor
                             <input type={"text"} {...register("ValueTag")}/>
